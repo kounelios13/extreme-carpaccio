@@ -1,5 +1,6 @@
 module.exports = {
     countries: {
+        'BG':21,
         'DE': 20,
         'UK': 21,
         'FR': 20,
