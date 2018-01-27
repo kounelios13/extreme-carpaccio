@@ -1,4 +1,6 @@
-const {countries}=require('consts.js');
+const {countries}=require('./consts.js');
 exports.order = function order(input, onResult) {
-  onResult(null, {});
+  onResult(null, {
+    input
+  });
 }

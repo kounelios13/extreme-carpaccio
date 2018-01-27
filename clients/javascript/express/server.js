@@ -3,7 +3,7 @@ var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var routes = require('./lib/routes');
-
+require('dotenv').config();
 module.exports = Server;
 
 function Server (doLogRequests) {
@@ -27,7 +27,7 @@ function Server (doLogRequests) {
   });
 
   var server = http.createServer(app);
-  server.start = server.listen.bind(server, process.env.PORT || 3000);
+  server.start = server.listen.bind(server, parseInt(process.env.PORT) || 3000);
   server.stop = server.close.bind(server);
   return server;
 }

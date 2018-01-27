@@ -3,7 +3,10 @@
 /**
  * Module dependencies.
  */
-
+ console.log('__dirname',__dirname)
+require('dotenv').config({
+  path:'./bin/.env'
+});
 var app = require('../app');
 var debug = require('debug')('xcarpaccio:server');
 var http = require('http');
@@ -87,4 +90,6 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log('bind',bind)
+  console.log(process.env.PORT);
 }
