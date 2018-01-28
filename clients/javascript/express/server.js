@@ -1,32 +1,38 @@
-var http = require('http');
-var express = require('express');
-var morgan = require('morgan');
-var bodyParser = require('body-parser');
-var routes = require('./lib/routes');
-require('dotenv').config();
-module.exports = Server;
+const path = require('path');
+const http = require('http');
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
-function Server (doLogRequests) {
-  var app = express();
+const feedback = require('./lib/feedback');
+const order = require('./lib/order');
+require('dotenv').config();
+
+function Server(doLogRequests) {
+  const app = express();
   app.set('json spaces', 2);
 
   if (doLogRequests) {
     app.use(morgan('dev'));
   }
   app.use(bodyParser.json());
-
-  app.get('/status', function (req, res) {
-    res.json({up: true})
+  app.set('views',path.join(__dirname,'views'));
+  app.set('view engine','pug');
+  app.get('/status', function(req, res) {
+    res.json({
+      up: true
+    })
   })
 
-  app.post('/order', function (req, res, next) {
-    routes.order(req, res, next);
-  });
-  app.post('/feedback', function (req, res, next) {
-    routes.feedback(req, res, next);
+
+  app.get('/',(req,res)=>{
+    res.render('index');
   });
 
-  var server = http.createServer(app);
+  app.use('/order',order);
+  app.use('/feedback', feedback);
+
+  const server = http.createServer(app);
   server.start = server.listen.bind(server, parseInt(process.env.PORT) || 3000);
   server.stop = server.close.bind(server);
   return server;
@@ -34,8 +40,9 @@ function Server (doLogRequests) {
 
 
 if (!module.parent) {
-  var server = new Server(true);
-  server.start(function () {
+  const server = new Server(true);
+  server.start(function() {
     console.log('server listening on port', server.address().port);
   });
 }
+module.exports = Server;

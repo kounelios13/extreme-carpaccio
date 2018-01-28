@@ -2,6 +2,9 @@ const {
     countries
 } = require('./costs.js');
 
+const express = require('express');
+const router = express.Router();
+
 function isValidReq(req) {
     const {
         prices,
@@ -36,10 +39,9 @@ function isValidReq(req) {
     }
     return true;
 }
-exports.order = function order(req, res, next) {
-    console.log('Received order')
-    console.log(req.body);
-    // TODO implement from here
+
+router.post('/',(req,res,next)=>{
+    console.log('Received new order')
     const {
         prices,
         quantities,
@@ -81,8 +83,6 @@ exports.order = function order(req, res, next) {
     res.json({
         total
     });
-}
-exports.feedback = function feedback(req, res, next) {
-    console.info("FEEDBACK:", req.body.type, req.body.content);
-    next();
-}
+});
+
+module.exports = router;
